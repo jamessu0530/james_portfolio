@@ -40,6 +40,8 @@ class InMemoryTimelineStorage implements TimelineStorage {
           'Completed a long-distance pilgrimage journey that strengthened my '
           'discipline, resilience, and independence.',
       imagePath: 'assets/timeline/camino.jpg',
+      locationUrl:
+          'https://www.google.com.tw/maps/place/01100%E7%BE%A9%E5%A4%A7%E5%88%A9%E7%B6%AD%E6%B3%B0%E5%8D%9A/@42.4212357,12.0960028,15.06z/data=!4m6!3m5!1s0x132f2cf9a622dfcf:0xb50255953c6f6b43!8m2!3d42.4204278!4d12.1075465!16zL20vMG4xN24?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D',
     ),
     const TimelineEvent(
       id: 'timeline-2025-care-ai',
