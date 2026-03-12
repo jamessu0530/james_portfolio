@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/app_constants.dart';
@@ -12,12 +15,16 @@ class ProfileHeader extends StatelessWidget {
     required this.isDarkMode,
     required this.onToggleLanguage,
     required this.onToggleTheme,
+    required this.avatarPath,
+    required this.onAvatarChanged,
   });
 
   final AppLanguage language;
   final bool isDarkMode;
   final VoidCallback onToggleLanguage;
   final VoidCallback onToggleTheme;
+  final String? avatarPath;
+  final ValueChanged<String?> onAvatarChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -53,39 +60,10 @@ class ProfileHeader extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        // -- Avatar (Stack + gradient circle + initial) --
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: AppSizes.avatarSize,
-              height: AppSizes.avatarSize,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [colors.primary, colors.tertiary],
-                ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: colors.primary.withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-            ),
-            // Replace with Image.asset('assets/profile_photo.png') when ready
-            const Text(
-              'J',
-              style: TextStyle(
-                fontSize: AppSizes.avatarFontSize,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        // -- Avatar (tap to change from gallery) --
+        _Avatar(
+          avatarPath: avatarPath,
+          onAvatarChanged: onAvatarChanged,
         ),
         const SizedBox(height: 16),
 
@@ -247,6 +225,85 @@ class _SocialButton extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _Avatar extends StatefulWidget {
+  const _Avatar({
+    required this.avatarPath,
+    required this.onAvatarChanged,
+  });
+
+  final String? avatarPath;
+  final ValueChanged<String?> onAvatarChanged;
+
+  @override
+  State<_Avatar> createState() => _AvatarState();
+}
+
+class _AvatarState extends State<_Avatar> {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickAvatar() async {
+    final XFile? file = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+      maxWidth: 800,
+    );
+    if (file == null) return;
+    widget.onAvatarChanged(file.path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final bool hasAvatar =
+        widget.avatarPath != null && widget.avatarPath!.isNotEmpty;
+
+    return GestureDetector(
+      onTap: _pickAvatar,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: AppSizes.avatarSize,
+            height: AppSizes.avatarSize,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [colors.primary, colors.tertiary],
+              ),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: colors.primary.withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+          ),
+          ClipOval(
+            child: hasAvatar
+                ? Image.file(
+                    File(widget.avatarPath!),
+                    width: AppSizes.avatarSize,
+                    height: AppSizes.avatarSize,
+                    fit: BoxFit.cover,
+                  )
+                : const Text(
+                    'J',
+                    style: TextStyle(
+                      fontSize: AppSizes.avatarFontSize,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }

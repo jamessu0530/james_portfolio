@@ -15,12 +15,16 @@ class HomeScreen extends StatelessWidget {
     required this.isDarkMode,
     required this.onToggleLanguage,
     required this.onToggleTheme,
+    required this.avatarPath,
+    required this.onAvatarChanged,
   });
 
   final AppLanguage language;
   final bool isDarkMode;
   final VoidCallback onToggleLanguage;
   final VoidCallback onToggleTheme;
+   final String? avatarPath;
+  final ValueChanged<String?> onAvatarChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +50,8 @@ class HomeScreen extends StatelessWidget {
                   isDarkMode: isDarkMode,
                   onToggleLanguage: onToggleLanguage,
                   onToggleTheme: onToggleTheme,
+                  avatarPath: avatarPath,
+                  onAvatarChanged: onAvatarChanged,
                 ),
               ),
               const SizedBox(height: AppSpacing.headerBottomGap),

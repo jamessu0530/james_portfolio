@@ -23,6 +23,7 @@ class PortfolioApp extends StatefulWidget {
 class _PortfolioAppState extends State<PortfolioApp> {
   AppLanguage _language = AppLanguage.zh;
   ThemeMode _themeMode = ThemeMode.light;
+  String? _avatarPath;
 
   void _toggleLanguage() {
     setState(() {
@@ -38,6 +39,12 @@ class _PortfolioAppState extends State<PortfolioApp> {
     });
   }
 
+  void _updateAvatar(String? path) {
+    setState(() {
+      _avatarPath = path;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,6 +57,8 @@ class _PortfolioAppState extends State<PortfolioApp> {
         isDarkMode: _themeMode == ThemeMode.dark,
         onToggleLanguage: _toggleLanguage,
         onToggleTheme: _toggleTheme,
+        avatarPath: _avatarPath,
+        onAvatarChanged: _updateAvatar,
       ),
     );
   }
