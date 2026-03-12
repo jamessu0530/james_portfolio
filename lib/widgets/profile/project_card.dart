@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_constants.dart';
-import '../data/profile_data.dart';
-import '../models/app_language.dart';
-import 'glass_card.dart';
-import 'section_title.dart';
+import '../../constants/app_constants.dart';
+import '../../data/profile_data.dart';
+import '../../models/app_language.dart';
+import '../common/glass_card.dart';
+import '../common/section_title.dart';
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key, required this.language});
@@ -62,7 +62,6 @@ class ProjectCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
           Text(
             project.title,
             style: const TextStyle(
@@ -72,7 +71,6 @@ class ProjectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          // Subtitle
           Text(
             project.subtitle.text(language),
             style: TextStyle(
@@ -82,7 +80,6 @@ class ProjectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // Highlights
           ...project.highlights.map(
             (h) => Padding(
               padding: const EdgeInsets.only(bottom: 4),
@@ -113,7 +110,6 @@ class ProjectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          // Tech tags
           Wrap(
             spacing: 6,
             runSpacing: 6,

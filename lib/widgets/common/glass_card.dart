@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_constants.dart';
-import '../styles/app_colors.dart';
+import '../../constants/app_constants.dart';
+import '../../styles/app_colors.dart';
 
 class GlassCard extends StatelessWidget {
   const GlassCard({

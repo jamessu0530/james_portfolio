@@ -1,36 +1,54 @@
 ## James Portfolio（Flutter iOS）
 
-一個為 **蘇奕勳（James Su）** 製作的個人履歷 / Portfolio App，風格偏 Apple，內建可拖曳的人生時間軸。
+一個用 Flutter 做的 iOS 風格履歷 App，重點放在「作品展示」和「人生時間軸」。
 
-### 功能重點
+### 功能一覽
 
-- **個人簡介**：中英雙語（繁體中文 / English），包含自我介紹、學歷、技能、專案與經歷。
-- **人生時間軸 Timeline**：
-  - 依照「年份」分段顯示（例如 2023 / 2024 / 2025）。
-  - 支援拖曳排序（ReorderableListView），跨年份拖曳會自動更新該事件的年份。
-  - 往最上方拖曳可自動建立更早的年份區塊。
-- **圖片顯示**：
-  - Timeline 事件圖片支援 `Image.asset` 與從相簿選擇（`image_picker`）。
-  - 個人頭像可點擊更換，相簿選取後即時更新畫面。
-- **主題**：內建淺色 / 深色模式切換，色彩與卡片樣式參考 iOS 風格。
+- 個人履歷：中英雙語介紹、學歷、技能、專案、活動。
+- 人生時間軸：依年份分段，拖曳改順序與年份，可往上拖出更早的年份。
+- 地點連結：Timeline 事件可加入 Google Maps 網址，點擊即可開啟地圖。
+- 照片：Timeline 事件可放 asset 或從相簿選圖；大頭貼可從相簿更換。
+- 主題：支援淺色 / 深色模式，Apple 風格。
 
-### 檔案結構（重點）
+### 檔案結構
 
-- `lib/main.dart`：App 進入點，管理語言（中 / 英）、主題模式與頭像路徑狀態。
-- `lib/data/profile_data.dart`：所有履歷內容集中管理（文字、自傳、技能、專案、活動）。
-- `lib/screens/home_screen.dart`：主畫面，使用 `SingleChildScrollView` 串接 Profile 與各區塊。
-- `lib/widgets/`：
-  - `profile_header.dart`：頭像、姓名、標語與 GitHub / LinkedIn / Medium 連結。
-  - `glass_card.dart`、`section_title.dart`、`skill_section.dart`、`project_card.dart`、`info_sections.dart`：一般履歷區塊的共用元件。
-  - `timeline_card.dart`、`timeline_image.dart`、`timeline_year_header.dart`、`timeline_editor_dialog.dart`：時間軸畫面用的卡片、圖片與編輯表單元件。
-- `lib/pages/timeline_page.dart`：時間軸頁面，負責年份分組、拖曳排序與事件 CRUD。
-- `lib/models/`：`AppLanguage`、`L10n`、`TimelineEvent` 等資料模型。
-- `lib/services/timeline_storage.dart`：時間軸事件的記憶體儲存層，未來可很容易改成 Hive 或 SharedPreferences。
+```text
+lib/
+  main.dart
+  constants/
+    app_constants.dart
+  styles/
+    app_colors.dart / app_theme.dart
+  models/
+    app_language.dart
+    timeline_event.dart
+  data/
+    profile_data.dart
+  screens/
+    home_screen.dart
+  pages/
+    timeline_page.dart
+  services/
+    timeline_storage.dart
+  widgets/
+    common/
+      glass_card.dart          # 共用卡片
+      section_title.dart       # 區塊標題
+    profile/
+      profile_header.dart      # 頭像、姓名、社群連結
+      info_sections.dart       # 關於我 / 學歷 / 活動 / 自傳
+      project_card.dart        # 專案卡片
+      skill_section.dart       # 技能區塊
+    timeline/
+      timeline_card.dart       # 事件卡片（含地點連結）
+      timeline_editor_dialog.dart
+      timeline_image.dart
+      timeline_year_header.dart
+```
 
-### 執行方式
+### 執行
 
 ```bash
 flutter pub get
 flutter run
 ```
-

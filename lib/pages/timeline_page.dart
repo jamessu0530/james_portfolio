@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../constants/app_constants.dart';
 import '../models/app_language.dart';
 import '../models/timeline_event.dart';
 import '../services/timeline_storage.dart';
-import '../widgets/timeline_card.dart';
-import '../widgets/timeline_editor_dialog.dart';
-import '../widgets/timeline_year_header.dart';
+import '../widgets/timeline/timeline_card.dart';
+import '../widgets/timeline/timeline_editor_dialog.dart';
+import '../widgets/timeline/timeline_year_header.dart';
 
 class TimelinePage extends StatefulWidget {
   TimelinePage({
@@ -25,6 +26,7 @@ class TimelinePage extends StatefulWidget {
 class _TimelinePageState extends State<TimelinePage> {
   List<TimelineEvent> _events = <TimelineEvent>[];
   bool _isLoading = true;
+  final ImagePicker _picker = ImagePicker();
 
   AppLanguage get _lang => widget.language;
   bool get _isZh => _lang == AppLanguage.zh;
@@ -125,6 +127,23 @@ class _TimelinePageState extends State<TimelinePage> {
     if (ok != true || !mounted) return;
 
     setState(() => _events.removeWhere((e) => e.id == event.id));
+    await _persistEvents();
+  }
+
+  Future<void> _changeEventImage(TimelineEvent event) async {
+    final XFile? file = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxWidth: 1600,
+    );
+    if (file == null) return;
+
+    setState(() {
+      final int i = _events.indexWhere((e) => e.id == event.id);
+      if (i != -1) {
+        _events[i] = event.copyWith(imagePath: file.path);
+      }
+    });
     await _persistEvents();
   }
 
@@ -280,6 +299,7 @@ class _TimelinePageState extends State<TimelinePage> {
             event: event,
             onEdit: () => _openEditor(event: event),
             onDelete: () => _deleteEvent(event),
+            onImageTap: () => _changeEventImage(event),
             dragHandle: ReorderableDragStartListener(
               index: index,
               child: Icon(

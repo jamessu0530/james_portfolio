@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_constants.dart';
+import '../../constants/app_constants.dart';
 
 class TimelineYearHeader extends StatelessWidget {
   const TimelineYearHeader({

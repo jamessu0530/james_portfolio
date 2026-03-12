@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../constants/app_constants.dart';
-import '../models/timeline_event.dart';
+import '../../constants/app_constants.dart';
+import '../../models/timeline_event.dart';
 import 'timeline_image.dart';
 
 class TimelineCard extends StatelessWidget {
@@ -11,12 +12,14 @@ class TimelineCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     required this.dragHandle,
+    required this.onImageTap,
   });
 
   final TimelineEvent event;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final Widget dragHandle;
+  final VoidCallback onImageTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,6 @@ class TimelineCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // -- Timeline rail (line + dot) --
         SizedBox(
           width: 36,
           child: Column(
@@ -58,8 +60,6 @@ class TimelineCard extends StatelessWidget {
             ],
           ),
         ),
-
-        // -- Card content --
         Expanded(
           child: Card(
             elevation: isDark ? 0 : 2,
@@ -70,20 +70,20 @@ class TimelineCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                // -- Cover image (centered) --
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Center(
-                    child: TimelineImage(imagePath: event.imagePath),
+                    child: GestureDetector(
+                      onTap: onImageTap,
+                      child: TimelineImage(imagePath: event.imagePath),
+                    ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // -- Top row: title + actions --
                       Row(
                         children: [
                           Expanded(
@@ -119,6 +119,10 @@ class TimelineCard extends StatelessWidget {
                                   ),
                         ),
                       ],
+                      if (event.hasLocation) ...[
+                        const SizedBox(height: 10),
+                        _LocationChip(url: event.locationUrl),
+                      ],
                     ],
                   ),
                 ),
@@ -127,6 +131,53 @@ class TimelineCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _LocationChip extends StatelessWidget {
+  const _LocationChip({required this.url});
+
+  final String url;
+
+  Future<void> _open() async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: _open,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: colors.primaryContainer.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.location_on, size: 16, color: colors.primary),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                '查看地點',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: colors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ),
+            const SizedBox(width: 2),
+            Icon(Icons.open_in_new, size: 12, color: colors.primary),
+          ],
+        ),
+      ),
     );
   }
 }

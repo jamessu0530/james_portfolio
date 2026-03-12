@@ -20,6 +20,7 @@ class InMemoryTimelineStorage implements TimelineStorage {
           'Expanded my English communication skills and adapted to a new '
           'learning environment.',
       imagePath: 'assets/timeline/australia.jpg',
+      locationUrl: 'https://maps.app.goo.gl/australia',
     ),
     const TimelineEvent(
       id: 'timeline-2024-hokkaido',
@@ -29,6 +30,7 @@ class InMemoryTimelineStorage implements TimelineStorage {
           'Joined an international STEM program and explored academic exchange '
           'beyond Taiwan.',
       imagePath: 'assets/timeline/hokkaido.jpg',
+      locationUrl: 'https://maps.app.goo.gl/HokkaidoUniversity',
     ),
     const TimelineEvent(
       id: 'timeline-2025-camino',
@@ -42,11 +44,12 @@ class InMemoryTimelineStorage implements TimelineStorage {
     const TimelineEvent(
       id: 'timeline-2025-care-ai',
       year: '2025',
-      title: 'Joined Prof. Ma\'s AI Lab',
+      title: "Joined Prof. Ma's AI Lab",
       description:
           'Started developing the CARE RAG AI system for healthcare support, '
           'information retrieval, and medical misinformation detection.',
       imagePath: 'assets/timeline/care-ai.jpg',
+      locationUrl: 'https://maps.app.goo.gl/NTOU',
     ),
   ];
 
@@ -57,18 +60,14 @@ class InMemoryTimelineStorage implements TimelineStorage {
 
   @override
   Future<void> saveEvents(List<TimelineEvent> events) async {
-    // Keep the API async so this service can later be replaced by Hive,
-    // SharedPreferences, or any other persistent storage without changing UI code.
     _events
       ..clear()
-      ..addAll(
-        events.map(
-          (event) => event.copyWith(),
-        ),
-      );
+      ..addAll(events.map((e) => TimelineEvent.fromMap(e.toMap())));
   }
 
   List<TimelineEvent> _copyEvents() {
-    return _events.map((event) => event.copyWith()).toList(growable: true);
+    return _events
+        .map((e) => TimelineEvent.fromMap(e.toMap()))
+        .toList(growable: true);
   }
 }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../constants/app_constants.dart';
-import '../data/profile_data.dart';
-import '../models/app_language.dart';
+import '../../constants/app_constants.dart';
+import '../../data/profile_data.dart';
+import '../../models/app_language.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
@@ -32,7 +32,6 @@ class ProfileHeader extends StatelessWidget {
 
     return Column(
       children: [
-        // -- Toggle buttons (language + dark mode) --
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -59,15 +58,11 @@ class ProfileHeader extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-
-        // -- Avatar (tap to change from gallery) --
         _Avatar(
           avatarPath: avatarPath,
           onAvatarChanged: onAvatarChanged,
         ),
         const SizedBox(height: 16),
-
-        // -- Name --
         Text(
           ProfileData.name,
           style: TextStyle(
@@ -87,8 +82,6 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-
-        // -- Tagline --
         Text(
           ProfileData.tagline.text(language),
           textAlign: TextAlign.center,
@@ -99,8 +92,6 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-
-        // -- Location --
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -120,8 +111,6 @@ class ProfileHeader extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-
-        // -- Social links --
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -149,7 +138,6 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
-// -- Toggle pill for language switch --
 class _TogglePill extends StatelessWidget {
   const _TogglePill({required this.label, required this.onTap});
 
@@ -180,7 +168,6 @@ class _TogglePill extends StatelessWidget {
   }
 }
 
-// -- Social link button --
 class _SocialButton extends StatelessWidget {
   const _SocialButton({
     required this.icon,
@@ -262,12 +249,12 @@ class _AvatarState extends State<_Avatar> {
     final bool hasAvatar =
         widget.avatarPath != null && widget.avatarPath!.isNotEmpty;
 
-    return GestureDetector(
-      onTap: _pickAvatar,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        GestureDetector(
+          onTap: _pickAvatar,
+          child: Container(
             width: AppSizes.avatarSize,
             height: AppSizes.avatarSize,
             decoration: BoxDecoration(
@@ -285,26 +272,47 @@ class _AvatarState extends State<_Avatar> {
                 ),
               ],
             ),
-          ),
-          ClipOval(
-            child: hasAvatar
-                ? Image.file(
-                    File(widget.avatarPath!),
-                    width: AppSizes.avatarSize,
-                    height: AppSizes.avatarSize,
-                    fit: BoxFit.cover,
-                  )
-                : const Text(
-                    'J',
-                    style: TextStyle(
-                      fontSize: AppSizes.avatarFontSize,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+            child: ClipOval(
+              child: hasAvatar
+                  ? Image.file(
+                      File(widget.avatarPath!),
+                      fit: BoxFit.cover,
+                    )
+                  : const Center(
+                      child: Text(
+                        'J',
+                        style: TextStyle(
+                          fontSize: AppSizes.avatarFontSize,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+            ),
           ),
-        ],
-      ),
+        ),
+        if (hasAvatar)
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: GestureDetector(
+              onTap: () => widget.onAvatarChanged(null),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.close,
+                  size: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

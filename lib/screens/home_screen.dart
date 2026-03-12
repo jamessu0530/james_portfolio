@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import '../models/app_language.dart';
 import '../pages/timeline_page.dart';
-import '../widgets/info_sections.dart';
-import '../widgets/profile_header.dart';
-import '../widgets/project_card.dart';
-import '../widgets/skill_section.dart';
+import '../widgets/profile/info_sections.dart';
+import '../widgets/profile/profile_header.dart';
+import '../widgets/profile/project_card.dart';
+import '../widgets/profile/skill_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({

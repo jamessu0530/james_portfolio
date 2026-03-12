@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../data/profile_data.dart';
-import '../models/app_language.dart';
-import 'glass_card.dart';
-import 'section_title.dart';
+import '../../data/profile_data.dart';
+import '../../models/app_language.dart';
+import '../common/glass_card.dart';
+import '../common/section_title.dart';
 
 // ---------------------------------------------------------------------------
 // About Me

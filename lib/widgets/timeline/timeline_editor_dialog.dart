@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../constants/app_constants.dart';
-import '../models/app_language.dart';
-import '../models/timeline_event.dart';
+import '../../constants/app_constants.dart';
+import '../../models/app_language.dart';
+import '../../models/timeline_event.dart';
 import 'timeline_image.dart';
 
 class TimelineEditorDialog extends StatefulWidget {
@@ -46,6 +46,7 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _imagePathController;
+  late final TextEditingController _locationUrlController;
 
   bool get _isEditing => widget.initialEvent != null;
   AppLanguage get _lang => widget.language;
@@ -66,6 +67,9 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
     _imagePathController = TextEditingController(
       text: widget.initialEvent?.imagePath ?? '',
     );
+    _locationUrlController = TextEditingController(
+      text: widget.initialEvent?.locationUrl ?? '',
+    );
     _imagePathController.addListener(_refresh);
   }
 
@@ -76,6 +80,7 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
     _titleController.dispose();
     _descriptionController.dispose();
     _imagePathController.dispose();
+    _locationUrlController.dispose();
     super.dispose();
   }
 
@@ -104,6 +109,7 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
       imagePath: _imagePathController.text.trim().isEmpty
           ? 'assets/timeline/placeholder.jpg'
           : _imagePathController.text.trim(),
+      locationUrl: _locationUrlController.text.trim(),
     );
 
     Navigator.of(context).pop(result);
@@ -136,7 +142,6 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // -- Drag handle --
                   Center(
                     child: Container(
                       width: 44,
@@ -158,7 +163,6 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
                   ),
                   const SizedBox(height: 20),
 
-                  // -- Year + Title side by side --
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -208,9 +212,20 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
                       return msg.isEmpty ? null : msg;
                     },
                   ),
+                  const SizedBox(height: 12),
+
+                  TextFormField(
+                    controller: _locationUrlController,
+                    keyboardType: TextInputType.url,
+                    decoration: InputDecoration(
+                      labelText: _isZh ? 'Google Maps 連結' : 'Google Maps URL',
+                      hintText: 'https://maps.app.goo.gl/...',
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 16),
 
-                  // -- Image picker row --
                   Row(
                     children: [
                       Expanded(
@@ -231,7 +246,6 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
                   ),
                   const SizedBox(height: 12),
 
-                  // -- Image preview --
                   TimelineImage(
                     imagePath: _imagePathController.text.isEmpty
                         ? 'assets/timeline/placeholder.jpg'
@@ -239,7 +253,6 @@ class _TimelineEditorDialogState extends State<TimelineEditorDialog> {
                   ),
                   const SizedBox(height: 20),
 
-                  // -- Action buttons --
                   Row(
                     children: [
                       Expanded(

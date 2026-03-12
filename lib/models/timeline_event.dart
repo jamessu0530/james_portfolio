@@ -5,6 +5,7 @@ class TimelineEvent {
     required this.title,
     required this.description,
     required this.imagePath,
+    this.locationUrl = '',
   });
 
   final String id;
@@ -12,6 +13,9 @@ class TimelineEvent {
   final String title;
   final String description;
   final String imagePath;
+  final String locationUrl;
+
+  bool get hasLocation => locationUrl.isNotEmpty;
 
   TimelineEvent copyWith({
     String? id,
@@ -19,6 +23,7 @@ class TimelineEvent {
     String? title,
     String? description,
     String? imagePath,
+    String? locationUrl,
   }) {
     return TimelineEvent(
       id: id ?? this.id,
@@ -26,6 +31,7 @@ class TimelineEvent {
       title: title ?? this.title,
       description: description ?? this.description,
       imagePath: imagePath ?? this.imagePath,
+      locationUrl: locationUrl ?? this.locationUrl,
     );
   }
 
@@ -36,6 +42,7 @@ class TimelineEvent {
       'title': title,
       'description': description,
       'imagePath': imagePath,
+      'locationUrl': locationUrl,
     };
   }
 
@@ -46,6 +53,7 @@ class TimelineEvent {
       title: map['title'] as String? ?? '',
       description: map['description'] as String? ?? '',
       imagePath: map['imagePath'] as String? ?? '',
+      locationUrl: map['locationUrl'] as String? ?? '',
     );
   }
 
