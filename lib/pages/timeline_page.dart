@@ -56,7 +56,14 @@ class _TimelinePageState extends State<TimelinePage> {
 
   List<String> _sortedYears() {
     final List<String> years =
-        _events.map((e) => e.year).toSet().toList(growable: false);
+        _events.map((e) => e.year).toSet().toList(growable: true);
+
+    // Always ensure the current year exists as a header,
+    // even if目前還沒有任何事件在該年份。
+    final String currentYear = DateTime.now().year.toString();
+    if (!years.contains(currentYear)) {
+      years.add(currentYear);
+    }
     years.sort((a, b) {
       final int? av = int.tryParse(a);
       final int? bv = int.tryParse(b);
