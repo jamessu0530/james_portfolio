@@ -232,6 +232,14 @@ class _Avatar extends StatefulWidget {
 
 class _AvatarState extends State<_Avatar> {
   final ImagePicker _picker = ImagePicker();
+  bool _showClear = false;
+
+  void _setShowClear(bool value) {
+    if (!mounted) return;
+    setState(() {
+      _showClear = value;
+    });
+  }
 
   Future<void> _pickAvatar() async {
     final XFile? file = await _picker.pickImage(
@@ -254,6 +262,8 @@ class _AvatarState extends State<_Avatar> {
       children: [
         GestureDetector(
           onTap: _pickAvatar,
+          onLongPressStart: (_) => _setShowClear(true),
+          onLongPressEnd: (_) => _setShowClear(false),
           child: Container(
             width: AppSizes.avatarSize,
             height: AppSizes.avatarSize,
@@ -291,7 +301,7 @@ class _AvatarState extends State<_Avatar> {
             ),
           ),
         ),
-        if (hasAvatar)
+        if (hasAvatar && _showClear)
           Positioned(
             right: 4,
             bottom: 4,
