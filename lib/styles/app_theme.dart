@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
@@ -12,6 +13,7 @@ class AppTheme {
           brightness: Brightness.light,
         ),
         scaffoldBackgroundColor: AppColors.lightScaffold,
+        textTheme: GoogleFonts.notoSansTextTheme(),
         useMaterial3: true,
       );
 
@@ -22,6 +24,9 @@ class AppTheme {
           brightness: Brightness.dark,
         ),
         scaffoldBackgroundColor: AppColors.darkScaffold,
+        textTheme: GoogleFonts.notoSansTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
         useMaterial3: true,
       );
 }
