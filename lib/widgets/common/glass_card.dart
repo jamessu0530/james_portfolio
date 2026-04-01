@@ -26,6 +26,7 @@ class GlassCard extends StatelessWidget {
       width: double.infinity,
       height: height,
       padding: padding,
+      alignment: Alignment.topLeft,
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(AppSizes.cardRadius),

@@ -19,7 +19,9 @@ class AppColors {
   static const double lightShadowAlpha = 0.06;
   static const double darkShadowAlpha = 0.3;
 
-  // -- Section card palette (light mode) --
+  // -- Journey card palette (light mode) --
+  static const Color cardIdentity = Color(0xFF2D4A3E);
+  static const Color cardHighlights = Color(0xFFD4956A);
   static const Color cardAbout = Color(0xFFB8C5B2);
   static const Color cardEducation = Color(0xFFC9B99A);
   static const Color cardSkills = Color(0xFFE8DFC0);
@@ -27,7 +29,9 @@ class AppColors {
   static const Color cardActivities = Color(0xFFB0A8A0);
   static const Color cardBiography = Color(0xFF8FA3A6);
 
-  // -- Section card palette (dark mode) --
+  // -- Journey card palette (dark mode) --
+  static const Color cardIdentityDark = Color(0xFF1A2E25);
+  static const Color cardHighlightsDark = Color(0xFF4A3020);
   static const Color cardAboutDark = Color(0xFF3A4A36);
   static const Color cardEducationDark = Color(0xFF4A3F2E);
   static const Color cardSkillsDark = Color(0xFF4A4530);
