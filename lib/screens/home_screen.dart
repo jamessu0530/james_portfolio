@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import '../models/app_language.dart';
 import '../pages/timeline_page.dart';
+import '../styles/app_colors.dart';
 import '../widgets/common/fade_slide_in.dart';
 import '../widgets/common/pressable_card.dart';
 import '../widgets/profile/info_sections.dart';
@@ -36,12 +37,39 @@ class HomeScreen extends StatelessWidget {
     const int baseMs = 150;
 
     final List<Widget> sections = [
-      AboutSection(language: language),
-      EducationSection(language: language),
-      SkillSection(language: language),
-      ProjectSection(language: language),
-      ActivitySection(language: language),
-      BiographySection(language: language),
+      AboutSection(
+        language: language,
+        cardColor: isDarkMode ? AppColors.cardAboutDark : AppColors.cardAbout,
+      ),
+      EducationSection(
+        language: language,
+        cardColor: isDarkMode
+            ? AppColors.cardEducationDark
+            : AppColors.cardEducation,
+      ),
+      SkillSection(
+        language: language,
+        cardColor:
+            isDarkMode ? AppColors.cardSkillsDark : AppColors.cardSkills,
+      ),
+      ProjectSection(
+        language: language,
+        cardColor: isDarkMode
+            ? AppColors.cardProjectsDark
+            : AppColors.cardProjects,
+      ),
+      ActivitySection(
+        language: language,
+        cardColor: isDarkMode
+            ? AppColors.cardActivitiesDark
+            : AppColors.cardActivities,
+      ),
+      BiographySection(
+        language: language,
+        cardColor: isDarkMode
+            ? AppColors.cardBiographyDark
+            : AppColors.cardBiography,
+      ),
     ];
 
     return Scaffold(
@@ -50,7 +78,6 @@ class HomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              // -- Profile header (fade + slide in) --
               FadeSlideIn(
                 delay: const Duration(milliseconds: 100),
                 offset: const Offset(0, 20),
@@ -73,7 +100,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.headerBottomGap),
 
-              // -- Timeline button (fade in) --
               FadeSlideIn(
                 delay: const Duration(milliseconds: 300),
                 offset: const Offset(0, 16),
@@ -101,7 +127,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.sectionGap),
 
-              // -- Content sections (staggered fade + pressable) --
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.pagePadding,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/profile_data.dart';
 import '../../models/app_language.dart';
+import '../../styles/app_colors.dart';
 import '../common/glass_card.dart';
 import '../common/section_title.dart';
 
@@ -10,16 +11,18 @@ import '../common/section_title.dart';
 // ---------------------------------------------------------------------------
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({super.key, required this.language});
+  const AboutSection({super.key, required this.language, this.cardColor});
 
   final AppLanguage language;
+  final Color? cardColor;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color textColor = _cardText(context);
     final String title = language == AppLanguage.zh ? '關於我' : 'About Me';
 
     return GlassCard(
+      color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,7 +32,7 @@ class AboutSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               height: 1.7,
-              color: colors.onSurfaceVariant,
+              color: textColor.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -43,16 +46,18 @@ class AboutSection extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class EducationSection extends StatelessWidget {
-  const EducationSection({super.key, required this.language});
+  const EducationSection({super.key, required this.language, this.cardColor});
 
   final AppLanguage language;
+  final Color? cardColor;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color textColor = _cardText(context);
     final String title = language == AppLanguage.zh ? '教育背景' : 'Education';
 
     return GlassCard(
+      color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,7 +73,7 @@ class EducationSection extends StatelessWidget {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: colors.primary,
+                      color: textColor.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -79,9 +84,10 @@ class EducationSection extends StatelessWidget {
                       children: [
                         Text(
                           item.school.text(language),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -89,7 +95,7 @@ class EducationSection extends StatelessWidget {
                           item.degree.text(language),
                           style: TextStyle(
                             fontSize: 13,
-                            color: colors.onSurfaceVariant,
+                            color: textColor.withValues(alpha: 0.7),
                           ),
                         ),
                         if (item.detail.isNotEmpty) ...[
@@ -98,9 +104,7 @@ class EducationSection extends StatelessWidget {
                             item.detail,
                             style: TextStyle(
                               fontSize: 12,
-                              color: colors.onSurfaceVariant.withValues(
-                                alpha: 0.7,
-                              ),
+                              color: textColor.withValues(alpha: 0.5),
                             ),
                           ),
                         ],
@@ -122,17 +126,19 @@ class EducationSection extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class ActivitySection extends StatelessWidget {
-  const ActivitySection({super.key, required this.language});
+  const ActivitySection({super.key, required this.language, this.cardColor});
 
   final AppLanguage language;
+  final Color? cardColor;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color textColor = _cardText(context);
     final String title =
         language == AppLanguage.zh ? '經歷與活動' : 'Experience & Activities';
 
     return GlassCard(
+      color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,7 +149,11 @@ class ActivitySection extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(item.icon, size: 18, color: colors.tertiary),
+                  Icon(
+                    item.icon,
+                    size: 18,
+                    color: textColor.withValues(alpha: 0.6),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -151,9 +161,10 @@ class ActivitySection extends StatelessWidget {
                       children: [
                         Text(
                           item.title.text(language),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -161,7 +172,7 @@ class ActivitySection extends StatelessWidget {
                           item.subtitle.text(language),
                           style: TextStyle(
                             fontSize: 13,
-                            color: colors.onSurfaceVariant,
+                            color: textColor.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -182,16 +193,18 @@ class ActivitySection extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class BiographySection extends StatelessWidget {
-  const BiographySection({super.key, required this.language});
+  const BiographySection({super.key, required this.language, this.cardColor});
 
   final AppLanguage language;
+  final Color? cardColor;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color textColor = _cardText(context);
     final String title = language == AppLanguage.zh ? '自傳' : 'Biography';
 
     return GlassCard(
+      color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -201,11 +214,20 @@ class BiographySection extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               height: 1.7,
-              color: colors.onSurfaceVariant,
+              color: textColor.withValues(alpha: 0.8),
             ),
           ),
         ],
       ),
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Helper
+// ---------------------------------------------------------------------------
+
+Color _cardText(BuildContext context) {
+  final bool isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.cardTextDark : AppColors.cardTextLight;
 }

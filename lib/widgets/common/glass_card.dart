@@ -8,27 +8,24 @@ class GlassCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(AppSpacing.pagePadding),
+    this.color,
   });
 
   final Widget child;
   final EdgeInsets padding;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bg = color ?? (isDark ? AppColors.darkCard : Colors.white);
 
     return Container(
       width: double.infinity,
       padding: padding,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard : Colors.white,
+        color: bg,
         borderRadius: BorderRadius.circular(AppSizes.cardRadius),
-        border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: AppColors.darkBorderAlpha)
-              : Colors.black.withValues(alpha: AppColors.lightBorderAlpha),
-          width: AppColors.cardBorderWidth,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(
@@ -37,7 +34,7 @@ class GlassCard extends StatelessWidget {
                   : AppColors.lightShadowAlpha,
             ),
             blurRadius: isDark ? 8 : 16,
-            offset: const Offset(0, 2),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
