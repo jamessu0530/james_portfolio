@@ -10,6 +10,7 @@ import '../widgets/profile/info_sections.dart';
 import '../widgets/profile/profile_header.dart';
 import '../widgets/profile/project_card.dart';
 import '../widgets/profile/skill_section.dart';
+import '../widgets/profile/stats_row.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -32,9 +33,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String timelineLabel =
-        language == AppLanguage.zh ? '查看人生時間軸' : 'Open Timeline';
+        language == AppLanguage.zh ? '人生時間軸' : 'Timeline';
 
-    const int baseMs = 150;
+    const int baseMs = 120;
 
     final List<Widget> sections = [
       AboutSection(
@@ -78,9 +79,10 @@ class HomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
+              // -- Profile header --
               FadeSlideIn(
-                delay: const Duration(milliseconds: 100),
-                offset: const Offset(0, 20),
+                delay: const Duration(milliseconds: 80),
+                offset: const Offset(0, 16),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.pagePadding,
@@ -98,18 +100,51 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.headerBottomGap),
+              const SizedBox(height: 16),
 
+              // -- Stats row --
               FadeSlideIn(
-                delay: const Duration(milliseconds: 300),
-                offset: const Offset(0, 16),
+                delay: const Duration(milliseconds: 200),
+                offset: const Offset(0, 12),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.pagePadding,
                   ),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: FilledButton.tonalIcon(
+                  child: StatsRow(
+                    stats: [
+                      StatItem(
+                        value: '4',
+                        label: language == AppLanguage.zh ? '專案' : 'Projects',
+                      ),
+                      StatItem(
+                        value: '5',
+                        label: language == AppLanguage.zh ? '語言' : 'Languages',
+                      ),
+                      StatItem(
+                        value: '7',
+                        label: language == AppLanguage.zh ? '經歷' : 'Experience',
+                      ),
+                      StatItem(
+                        value: '810',
+                        label: 'TOEIC',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // -- Timeline button --
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 280),
+                offset: const Offset(0, 12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.pagePadding,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
@@ -121,12 +156,19 @@ class HomeScreen extends StatelessWidget {
                       },
                       icon: const Icon(Icons.timeline_outlined),
                       label: Text(timelineLabel),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.sectionGap),
+              const SizedBox(height: AppSpacing.sectionGap + 4),
 
+              // -- Stacked card sections --
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.pagePadding,
@@ -135,7 +177,8 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     for (int i = 0; i < sections.length; i++) ...[
                       FadeSlideIn(
-                        delay: Duration(milliseconds: 400 + i * baseMs),
+                        delay: Duration(milliseconds: 350 + i * baseMs),
+                        offset: const Offset(0, 24),
                         child: PressableCard(child: sections[i]),
                       ),
                       if (i < sections.length - 1)
