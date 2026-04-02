@@ -40,12 +40,17 @@ class AboutSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            ProfileData.bio.text(language),
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.7,
-              color: textColor.withValues(alpha: 0.75),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Text(
+                ProfileData.bio.text(language),
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.7,
+                  color: textColor.withValues(alpha: 0.75),
+                ),
+              ),
             ),
           ),
         ],
@@ -173,49 +178,58 @@ class ActivitySection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ...ProfileData.experiences.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.08)
-                          : Colors.black.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      item.icon,
-                      size: 18,
-                      color: textColor.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title.text(language),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
+                  for (final ExperienceItem item in ProfileData.experiences)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Colors.white.withValues(alpha: 0.08)
+                                  : Colors.black.withValues(alpha: 0.06),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              item.icon,
+                              size: 18,
+                              color: textColor.withValues(alpha: 0.6),
+                            ),
                           ),
-                        ),
-                        Text(
-                          item.subtitle.text(language),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: textColor.withValues(alpha: 0.5),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title.text(language),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: textColor,
+                                  ),
+                                ),
+                                Text(
+                                  item.subtitle.text(language),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: textColor.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -255,12 +269,17 @@ class BiographySection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            ProfileData.biography.text(language),
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.7,
-              color: textColor.withValues(alpha: 0.75),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Text(
+                ProfileData.biography.text(language),
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.7,
+                  color: textColor.withValues(alpha: 0.75),
+                ),
+              ),
             ),
           ),
         ],
