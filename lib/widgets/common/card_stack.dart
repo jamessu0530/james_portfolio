@@ -22,10 +22,10 @@ class _CardStackState extends State<CardStack>
   late AnimationController _anim;
   Animation<double>? _snap;
 
-  static const double _stackGap = 36.0;
-  static const double _scaleStep = 0.06;
-  static const double _opacityStep = 0.12;
-  static const double _topInset = 12.0;
+  static const double _stackGap = 40.0;
+  static const double _scaleXStep = 0.08;
+  static const double _opacityStep = 0.08;
+  static const double _topInset = 10.0;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _CardStackState extends State<CardStack>
   void _onDragUpdate(DragUpdateDetails d) {
     _anim.stop();
     final double h = MediaQuery.of(context).size.height;
-    final double delta = -d.delta.dy / (h * 0.38);
+    final double delta = -d.delta.dy / (h * 0.35);
     setState(() {
       _page = (_page + delta).clamp(0.0, widget.children.length - 1.0);
     });
@@ -58,9 +58,9 @@ class _CardStackState extends State<CardStack>
     final double v = -d.velocity.pixelsPerSecond.dy / h;
 
     int target;
-    if (v > 0.7) {
+    if (v > 0.6) {
       target = _page.ceil();
-    } else if (v < -0.7) {
+    } else if (v < -0.6) {
       target = _page.floor();
     } else {
       target = _page.round();
@@ -126,27 +126,31 @@ class _CardStackState extends State<CardStack>
 
     return entries.map((e) {
       final double diff = e.diff;
-      double y, s, o;
-      double shadowAlpha;
+      double y, scaleX, o;
+      double blur, offset, alpha;
 
       if (diff < 0) {
         final double screenH = MediaQuery.of(context).size.height;
-        y = _topInset + diff * screenH * 0.6;
-        s = 1.0;
-        o = (1.0 + diff * 1.3).clamp(0.0, 1.0);
-        shadowAlpha = 0;
+        y = _topInset + diff * screenH * 0.55;
+        scaleX = 1.0;
+        o = (1.0 + diff * 1.2).clamp(0.0, 1.0);
+        blur = 0;
+        offset = 0;
+        alpha = 0;
       } else {
         y = _topInset + diff * _stackGap;
-        s = (1.0 - diff * _scaleStep).clamp(0.82, 1.0);
-        o = (1.0 - diff * _opacityStep).clamp(0.0, 1.0);
-        shadowAlpha = (0.12 - diff * 0.03).clamp(0.0, 0.12);
+        scaleX = (1.0 - diff * _scaleXStep).clamp(0.7, 1.0);
+        o = (1.0 - diff * _opacityStep).clamp(0.3, 1.0);
+        blur = (24.0 - diff * 5).clamp(6.0, 24.0);
+        offset = (10.0 - diff * 2).clamp(3.0, 10.0);
+        alpha = (0.14 - diff * 0.03).clamp(0.02, 0.14);
       }
 
       return Transform.translate(
         key: ValueKey<int>(e.index),
         offset: Offset(0, y),
-        child: Transform.scale(
-          scale: s,
+        child: Transform(
+          transform: Matrix4.identity()..scale(scaleX, 1.0, 1.0),
           alignment: Alignment.topCenter,
           child: Opacity(
             opacity: o,
@@ -158,13 +162,13 @@ class _CardStackState extends State<CardStack>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSizes.cardRadius),
                   boxShadow: [
-                    if (shadowAlpha > 0)
+                    if (alpha > 0)
                       BoxShadow(
                         color: Colors.black.withValues(
-                          alpha: isDark ? shadowAlpha * 2 : shadowAlpha,
+                          alpha: isDark ? alpha * 1.8 : alpha,
                         ),
-                        blurRadius: 24,
-                        offset: const Offset(0, 10),
+                        blurRadius: blur,
+                        offset: Offset(0, offset),
                       ),
                   ],
                 ),
@@ -200,7 +204,7 @@ class _DotIndicator extends StatelessWidget {
       children: List.generate(count, (i) {
         final double d = (i - page).abs();
         final double size = d < 0.5 ? 8 : 5;
-        final double alpha = d < 0.5 ? 0.9 : 0.25;
+        final double a = d < 0.5 ? 0.9 : 0.25;
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -209,7 +213,7 @@ class _DotIndicator extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: base.withValues(alpha: alpha),
+            color: base.withValues(alpha: a),
           ),
         );
       }),
