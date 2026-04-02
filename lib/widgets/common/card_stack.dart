@@ -22,16 +22,17 @@ class _CardStackState extends State<CardStack>
   late AnimationController _anim;
   Animation<double>? _snap;
 
-  static const double _stackGap = 22.0;
-  static const double _scaleStep = 0.04;
-  static const double _opacityStep = 0.22;
+  static const double _stackGap = 36.0;
+  static const double _scaleStep = 0.06;
+  static const double _opacityStep = 0.12;
+  static const double _topInset = 12.0;
 
   @override
   void initState() {
     super.initState();
     _anim = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 450),
     )..addListener(() {
         if (_snap != null) setState(() => _page = _snap!.value);
       });
@@ -46,7 +47,7 @@ class _CardStackState extends State<CardStack>
   void _onDragUpdate(DragUpdateDetails d) {
     _anim.stop();
     final double h = MediaQuery.of(context).size.height;
-    final double delta = -d.delta.dy / (h * 0.55);
+    final double delta = -d.delta.dy / (h * 0.38);
     setState(() {
       _page = (_page + delta).clamp(0.0, widget.children.length - 1.0);
     });
@@ -57,9 +58,9 @@ class _CardStackState extends State<CardStack>
     final double v = -d.velocity.pixelsPerSecond.dy / h;
 
     int target;
-    if (v > 1.2) {
+    if (v > 0.7) {
       target = _page.ceil();
-    } else if (v < -1.2) {
+    } else if (v < -0.7) {
       target = _page.floor();
     } else {
       target = _page.round();
@@ -85,8 +86,9 @@ class _CardStackState extends State<CardStack>
             ),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double cardH =
-                    constraints.maxHeight - (widget.maxVisible - 1) * _stackGap;
+                final double cardH = constraints.maxHeight -
+                    _topInset -
+                    (widget.maxVisible - 1) * _stackGap;
 
                 return GestureDetector(
                   onVerticalDragUpdate: _onDragUpdate,
@@ -101,9 +103,9 @@ class _CardStackState extends State<CardStack>
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         _DotIndicator(count: widget.children.length, page: _page),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -120,19 +122,24 @@ class _CardStackState extends State<CardStack>
 
     entries.sort((a, b) => b.diff.compareTo(a.diff));
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return entries.map((e) {
       final double diff = e.diff;
       double y, s, o;
+      double shadowAlpha;
 
       if (diff < 0) {
         final double screenH = MediaQuery.of(context).size.height;
-        y = diff * screenH * 0.65;
+        y = _topInset + diff * screenH * 0.6;
         s = 1.0;
-        o = (1.0 + diff * 1.4).clamp(0.0, 1.0);
+        o = (1.0 + diff * 1.3).clamp(0.0, 1.0);
+        shadowAlpha = 0;
       } else {
-        y = diff * _stackGap;
-        s = (1.0 - diff * _scaleStep).clamp(0.85, 1.0);
+        y = _topInset + diff * _stackGap;
+        s = (1.0 - diff * _scaleStep).clamp(0.82, 1.0);
         o = (1.0 - diff * _opacityStep).clamp(0.0, 1.0);
+        shadowAlpha = (0.12 - diff * 0.03).clamp(0.0, 0.12);
       }
 
       return Transform.translate(
@@ -145,9 +152,22 @@ class _CardStackState extends State<CardStack>
             opacity: o,
             child: IgnorePointer(
               ignoring: e.index != current,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: cardH,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+                  boxShadow: [
+                    if (shadowAlpha > 0)
+                      BoxShadow(
+                        color: Colors.black.withValues(
+                          alpha: isDark ? shadowAlpha * 2 : shadowAlpha,
+                        ),
+                        blurRadius: 24,
+                        offset: const Offset(0, 10),
+                      ),
+                  ],
+                ),
                 child: widget.children[e.index],
               ),
             ),
